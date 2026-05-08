@@ -6,7 +6,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export default function MerekPage() {
-  const [cartCount, setCartCount] = useState(1);
   const [activeFilter, setActiveFilter] = useState("Semua");
 
   const brandData = [
@@ -53,12 +52,11 @@ export default function MerekPage() {
     <main className="min-h-screen bg-[#fafafa] flex flex-col font-sans selection:bg-[#c5a877] selection:text-white text-gray-900">
       {/* Header dengan Filter yang dipindahkan ke atas */}
       <Header 
-        cartCount={cartCount} 
-        onSearch={(q) => console.log(q)} 
-        showFilters={true}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
-      />
+  onSearch={(q) => console.log(q)} 
+  showFilters={true}
+  activeFilter={activeFilter}
+  setActiveFilter={setActiveFilter}
+/>
       
       {/* Hero Section */}
       <section className="relative pt-32 pb-24 px-8 overflow-hidden bg-white">

@@ -43,6 +43,7 @@ export default function ProductCard({ brand, name, price, oldPrice, rating, tag,
          <p className="text-[#c5a877] font-bold text-lg">{price}</p>
          <p className="text-xs text-gray-400 line-through">{oldPrice}</p>
       </div>
+      
       <button 
         onClick={onAddToCart}
         className="w-full border border-[#c5a877] text-[#c5a877] rounded-full py-2 text-xs font-bold hover:bg-[#c5a877] hover:text-white transition-all transform hover:scale-105 active:scale-95 mt-auto"

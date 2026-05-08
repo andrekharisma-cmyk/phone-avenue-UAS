@@ -1,17 +1,18 @@
 "use client";
 
 import React, { useState, use } from 'react';
-import Link from 'next/link'; // <--- TAMBAHKAN BARIS INI
+import Link from 'next/link'; 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
+import { useCart } from '@/app/context/CartContext'; 
 
 export default function KatalogMerekPage({ params }: { params: Promise<{ brandName: string }> }) {
   // Mengambil nama merek dari URL secara dinamis
   const resolvedParams = use(params);
   const brandTitle = resolvedParams.brandName; // Nama ini harus cocok dengan nama folder
+  const { addToCart } = useCart();
   
-  const [cartCount, setCartCount] = useState(1);
 
   // Database produk sederhana
   const allProducts = [
@@ -28,7 +29,7 @@ export default function KatalogMerekPage({ params }: { params: Promise<{ brandNa
 
   return (
     <main className="min-h-screen bg-white flex flex-col font-sans">
-      <Header cartCount={cartCount} onSearch={(q) => console.log(q)} />
+      <Header onSearch={(q) => console.log(q)} />
 
       <section className="py-20 px-8 bg-gray-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
@@ -44,7 +45,17 @@ export default function KatalogMerekPage({ params }: { params: Promise<{ brandNa
         {displayProducts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {displayProducts.map((product) => (
-              <ProductCard key={product.id} {...product} onAddToCart={() => setCartCount(prev => prev + 1)} />
+              <ProductCard 
+                key={product.id} 
+                {...product} 
+                onAddToCart={() => addToCart({
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  imageBg: "bg-gray-100", 
+                  quantity: 1
+                })} 
+/>
             ))}
           </div>
         ) : (
