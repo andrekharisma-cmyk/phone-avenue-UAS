@@ -21,7 +21,7 @@ export default function PembayaranPage() {
 
   return (
     <main className="min-h-screen bg-[#fcfcfc] flex flex-col font-sans relative selection:bg-[#c5a877] selection:text-white">
-      <Header cartCount={cartCount} onSearch={(q) => console.log(q)} />
+      <Header onSearch={(q) => console.log(q)} />
       
       {/* --- REVISI: MODAL SUKSES PREMIUM --- */}
       {showSuccess && (
