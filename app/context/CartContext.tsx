@@ -1,12 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 // Struktur data barang di keranjang
 export interface CartItem {
   id: number;
   name: string;
   price: string;
+  image?: string;
   imageBg: string;
   quantity: number;
 }
@@ -32,27 +33,43 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, 0);
 
   const addToCart = (newItem: CartItem) => {
-    setCart(prevCart => {
-      const existing = prevCart.find(i => i.id === newItem.id);
+    setCart((prevCart) => {
+      const existing = prevCart.find((i) => i.id === newItem.id);
       if (existing) {
-        return prevCart.map(i => i.id === newItem.id ? { ...i, quantity: i.quantity + 1 } : i);
+        return prevCart.map((i) =>
+          i.id === newItem.id ? { ...i, quantity: i.quantity + 1 } : i,
+        );
       }
       return [...prevCart, { ...newItem, quantity: 1 }];
     });
   };
 
-  const removeFromCart = (id: number) => setCart(prev => prev.filter(i => i.id !== id));
+  const removeFromCart = (id: number) =>
+    setCart((prev) => prev.filter((i) => i.id !== id));
 
   const updateQuantity = (id: number, delta: number) => {
-    setCart(prev => prev.map(item => 
-      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-    ));
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
+          : item,
+      ),
+    );
   };
 
   const clearCart = () => setCart([]);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, totalPrice }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        totalPrice,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

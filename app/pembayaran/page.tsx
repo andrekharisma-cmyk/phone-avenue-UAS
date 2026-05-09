@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { useCart } from '../context/CartContext';
+import React, { useState } from "react";
+import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { useCart } from "../context/CartContext";
 
 export default function PembayaranPage() {
   const { cart, totalPrice, clearCart } = useCart();
@@ -12,157 +12,181 @@ export default function PembayaranPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  // 1. STATE UNTUK FORM INPUT
   const [formData, setFormData] = useState({
     nama: "",
     whatsapp: "",
-    alamat: ""
+    alamat: "",
   });
 
-  // 2. CEK APAKAH FORM SUDAH LENGKAP
-  const isFormValid = 
-    formData.nama.trim() !== "" && 
-    formData.whatsapp.trim() !== "" && 
+  const isFormValid =
+    formData.nama.trim() !== "" &&
+    formData.whatsapp.trim() !== "" &&
     formData.alamat.trim() !== "" &&
     cart.length > 0;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const tax = totalPrice * 0.11;
   const grandTotal = totalPrice + tax;
 
-  const handleProcessPayment = () => {
-    if (!isFormValid) return; // Guard clause tambahan
-
-    setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
-      setShowSuccess(true);
-    }, 2500);
-  };
-
   return (
-    <main className="min-h-screen bg-[#fcfcfc] flex flex-col font-sans relative">
+    <main className="min-h-screen bg-white flex flex-col font-sans">
       <Header onSearch={(q) => console.log(q)} />
-      
-      {/* MODAL SUKSES (Data Dinamis) */}
-      {showSuccess && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-500">
-          <div className="absolute inset-0 bg-[#0a0f16]/90 backdrop-blur-md"></div>
-          <div className="relative bg-white w-full max-w-lg rounded-[3rem] overflow-hidden shadow-2xl p-10 sm:p-14 text-center">
-            <h2 className="text-3xl font-light tracking-tighter text-gray-900 mb-2">
-              Pesanan <span className="font-serif italic text-[#c5a877]">Diterima</span>
-            </h2>
-            <div className="bg-gray-50 rounded-2xl p-6 my-8 text-left space-y-2">
-              <p className="text-[10px] font-black uppercase text-[#c5a877] tracking-widest">Tujuan Pengiriman:</p>
-              <p className="text-sm font-bold text-gray-900">{formData.nama}</p>
-              <p className="text-xs text-gray-500 italic">{formData.alamat}</p>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <button onClick={() => window.print()} className="py-4 bg-[#1c2b3e] text-white rounded-full text-[10px] font-bold tracking-[0.2em] uppercase">Invoice</button>
-              <Link href="/" onClick={() => clearCart()} className="py-4 border-2 border-gray-100 text-gray-400 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase flex items-center justify-center">Selesai</Link>
-            </div>
-          </div>
-        </div>
-      )}
 
-      <div className={`flex-grow transition-all duration-1000 ${showSuccess ? 'blur-xl opacity-30 scale-90' : ''}`}>
-        <div className="max-w-7xl mx-auto w-full px-8 py-16">
-          <div className="flex flex-col lg:flex-row gap-20">
-            
-            {/* FORM INPUT DENGAN VALIDASI */}
-            <div className="lg:w-2/3 space-y-16">
-              <section>
-                <div className="flex items-center space-x-6 mb-10">
-                  <span className="text-4xl font-serif italic text-[#c5a877] opacity-40">01</span>
-                  <h3 className="text-xs font-bold tracking-[0.4em] uppercase text-gray-900">Informasi Pengiriman</h3>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Nama Penerima</label>
-                    <input 
-                      name="nama"
-                      type="text" 
-                      value={formData.nama}
-                      onChange={handleInputChange}
-                      placeholder="Masukkan nama lengkap..." 
-                      className={`w-full bg-white border-b-2 p-4 text-sm outline-none transition-all font-medium ${formData.nama ? 'border-[#c5a877]' : 'border-gray-100'}`} 
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Kontak WhatsApp</label>
-                    <input 
-                      name="whatsapp"
-                      type="text" 
-                      value={formData.whatsapp}
-                      onChange={handleInputChange}
-                      placeholder="+62..." 
-                      className={`w-full bg-white border-b-2 p-4 text-sm outline-none transition-all font-medium ${formData.whatsapp ? 'border-[#c5a877]' : 'border-gray-100'}`} 
-                    />
-                  </div>
-                  <div className="md:col-span-2 space-y-3">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-2">Alamat Lengkap</label>
-                    <textarea 
-                      name="alamat"
-                      rows={2} 
-                      value={formData.alamat}
-                      onChange={handleInputChange}
-                      placeholder="Masukkan alamat pengiriman lengkap..." 
-                      className={`w-full bg-white border-b-2 p-4 text-sm outline-none transition-all resize-none font-medium ${formData.alamat ? 'border-[#c5a877]' : 'border-gray-100'}`}
-                    ></textarea>
-                  </div>
-                </div>
-              </section>
-
-              {/* Bagian Metode Pembayaran Tetap Sama */}
-              <section>
-                <div className="flex items-center space-x-6 mb-10">
-                  <span className="text-4xl font-serif italic text-[#c5a877] opacity-40">02</span>
-                  <h3 className="text-xs font-bold tracking-[0.4em] uppercase text-gray-900">Metode Pembayaran</h3>
-                </div>
-                <div className="grid grid-cols-3 gap-6">
-                  {['cc', 'va', 'ew'].map((m) => (
-                    <button key={m} onClick={() => setPaymentMethod(m)} className={`h-32 rounded-[2rem] border-2 flex flex-col items-center justify-center space-y-3 transition-all ${paymentMethod === m ? 'border-[#c5a877] bg-white shadow-xl shadow-[#c5a877]/10 -translate-y-2' : 'border-gray-50 bg-gray-50/50 grayscale opacity-60'}`}>
-                      <span className="text-xl">{m === 'cc' ? '💳' : m === 'va' ? '🏦' : '📱'}</span>
-                      <span className="text-[9px] font-black tracking-widest uppercase">{m === 'cc' ? 'Credit Card' : m === 'va' ? 'Bank Transfer' : 'E-Wallet'}</span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-            </div>
-
-            {/* RINGKASAN & TOMBOL DENGAN LOGIKA DISABLED */}
-            <div className="lg:w-1/3">
-              <div className="sticky top-40 bg-[#1c2b3e] text-white p-12 rounded-[3rem] shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#c5a877]/10 rounded-bl-[100px]"></div>
-                <h3 className="text-xs font-bold tracking-[0.4em] uppercase text-[#c5a877] mb-10">Ringkasan Pesanan</h3>
-                
-                {/* Loop items... */}
-                <div className="space-y-4 mb-8 border-b border-white/5 pb-8">
-                  <div className="flex justify-between text-[10px] uppercase tracking-widest text-gray-400">
-                    <span>Total Akhir</span>
-                    <span className="text-xl font-black text-[#c5a877]">Rp {grandTotal.toLocaleString('id-ID')}</span>
-                  </div>
-                </div>
-
-                <button 
-                  onClick={handleProcessPayment}
-                  disabled={!isFormValid || isProcessing}
-                  className={`w-full py-5 rounded-full font-bold text-[10px] tracking-[0.3em] uppercase transition-all duration-500 shadow-2xl ${
-                    !isFormValid || isProcessing
-                    ? 'bg-white/5 text-white/20 cursor-not-allowed opacity-50' 
-                    : 'bg-[#c5a877] text-[#1c2b3e] hover:bg-white hover:scale-105 active:scale-95 shadow-[#c5a877]/20'
-                  }`}
-                >
-                  {!isFormValid ? "Lengkapi Data..." : isProcessing ? "Memproses..." : "Konfirmasi Transaksi"}
-                </button>
-                {!isFormValid && cart.length > 0 && (
-                  <p className="text-[8px] text-center mt-4 text-gray-500 tracking-widest uppercase">Nama, Kontak, dan Alamat wajib diisi</p>
-                )}
+      <div className="flex-grow max-w-7xl mx-auto w-full px-8 py-20">
+        <div className="flex flex-col lg:flex-row gap-20">
+          {/* SISI KIRI: FORM (DIBUAT LEBIH KONTRAS) */}
+          <div className="lg:w-2/3 space-y-20">
+            {/* SECTION 01 */}
+            <section>
+              <div className="flex items-center space-x-6 mb-12">
+                <span className="text-5xl font-serif italic text-[#c5a877] opacity-100">
+                  01
+                </span>
+                <h3 className="text-sm font-black tracking-[0.3em] uppercase text-gray-900 border-b-2 border-[#c5a877] pb-1">
+                  Informasi Pengiriman
+                </h3>
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-3">
+                  <label className="text-[11px] font-black uppercase tracking-widest text-gray-900">
+                    Nama Lengkap Penerima
+                  </label>
+                  <input
+                    name="nama"
+                    onChange={handleInputChange}
+                    placeholder="Contoh: Andre Kharisma"
+                    className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl p-4 text-sm focus:border-[#c5a877] focus:bg-white outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                  />
+                </div>
+                <div className="space-y-3">
+                  <label className="text-[11px] font-black uppercase tracking-widest text-gray-900">
+                    Nomor WhatsApp
+                  </label>
+                  <input
+                    name="whatsapp"
+                    onChange={handleInputChange}
+                    placeholder="0812xxxx"
+                    className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl p-4 text-sm focus:border-[#c5a877] focus:bg-white outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                  />
+                </div>
+                <div className="md:col-span-2 space-y-3">
+                  <label className="text-[11px] font-black uppercase tracking-widest text-gray-900">
+                    Alamat Lengkap Tujuan
+                  </label>
+                  <textarea
+                    name="alamat"
+                    rows={3}
+                    onChange={handleInputChange}
+                    placeholder="Jl. Gajah Mada No. 123, Medan..."
+                    className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl p-4 text-sm focus:border-[#c5a877] focus:bg-white outline-none transition-all text-gray-900 placeholder:text-gray-400 resize-none"
+                  />
+                </div>
+              </div>
+            </section>
+
+            {/* SECTION 02 */}
+            <section>
+              <div className="flex items-center space-x-6 mb-12">
+                <span className="text-5xl font-serif italic text-[#c5a877]">
+                  02
+                </span>
+                <h3 className="text-sm font-black tracking-[0.3em] uppercase text-gray-900 border-b-2 border-[#c5a877] pb-1">
+                  Metode Pembayaran
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {[
+                  { id: "cc", label: "Credit Card", icon: "💳" },
+                  { id: "va", label: "Bank Transfer", icon: "🏦" },
+                  { id: "ew", label: "E-Wallet", icon: "📱" },
+                ].map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => setPaymentMethod(m.id)}
+                    className={`p-8 rounded-3xl border-2 transition-all flex flex-col items-center gap-4 ${
+                      paymentMethod === m.id
+                        ? "border-[#c5a877] bg-white shadow-xl scale-105"
+                        : "border-gray-100 bg-gray-50 opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <span className="text-3xl">{m.icon}</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-900">
+                      {m.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          {/* SISI KANAN: RINGKASAN (DIBUAT LEBIH GAHAR) */}
+          <div className="lg:w-1/3">
+            <div className="sticky top-40 bg-gray-900 rounded-[3rem] p-10 shadow-2xl">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-[#c5a877] mb-10 border-b border-white/10 pb-4">
+                Ringkasan Pesanan
+              </h3>
+
+              <div className="space-y-6 mb-10 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+                {cart.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex justify-between items-start"
+                  >
+                    <div className="space-y-1">
+                      <p className="text-[11px] font-bold text-white uppercase tracking-wider leading-tight">
+                        {item.name}
+                      </p>
+                      <p className="text-[10px] text-gray-500">
+                        Jumlah: {item.quantity}
+                      </p>
+                    </div>
+                    <p className="text-[11px] font-bold text-[#c5a877]">
+                      {item.price}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-4 border-t border-white/10 pt-8 mb-10">
+                <div className="flex justify-between text-[11px] uppercase tracking-widest text-gray-400">
+                  <span>Subtotal</span>
+                  <span className="text-white">
+                    Rp {totalPrice.toLocaleString("id-ID")}
+                  </span>
+                </div>
+                <div className="flex justify-between text-[11px] uppercase tracking-widest text-gray-400">
+                  <span>Pajak PPN (11%)</span>
+                  <span className="text-white">
+                    Rp {tax.toLocaleString("id-ID")}
+                  </span>
+                </div>
+                <div className="flex justify-between items-end pt-4">
+                  <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#c5a877]">
+                    Total Akhir
+                  </span>
+                  <span className="text-2xl font-black text-white tracking-tighter">
+                    Rp {grandTotal.toLocaleString("id-ID")}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                disabled={!isFormValid || isProcessing}
+                className={`w-full py-5 rounded-2xl font-black text-[10px] tracking-[0.3em] uppercase transition-all ${
+                  !isFormValid
+                    ? "bg-white/5 text-white/20 cursor-not-allowed"
+                    : "bg-[#c5a877] text-gray-900 hover:bg-white hover:scale-105 active:scale-95 shadow-lg shadow-[#c5a877]/20"
+                }`}
+              >
+                {!isFormValid ? "Lengkapi Data..." : "Konfirmasi Transaksi"}
+              </button>
             </div>
           </div>
         </div>
