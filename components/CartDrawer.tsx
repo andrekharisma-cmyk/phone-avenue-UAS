@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart, CartItem } from "../app/context/CartContext";
+import { useRouter } from "next/navigation"; // 1. Import Router
 
 export default function CartDrawer({
   isOpen,
@@ -10,8 +11,15 @@ export default function CartDrawer({
   onClose: () => void;
 }) {
   const { cart, removeFromCart, updateQuantity, totalPrice } = useCart();
+  const router = useRouter(); // 2. Inisialisasi Router
 
   if (!isOpen) return null;
+
+  // 3. Fungsi untuk berpindah halaman
+  const handleCheckout = () => {
+    onClose(); // Tutup laci keranjang dulu
+    router.push("/pembayaran"); // Pindah ke halaman pembayaran
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex justify-end">
@@ -50,7 +58,7 @@ export default function CartDrawer({
                 key={item.id}
                 className="flex gap-6 items-center animate-in fade-in slide-in-from-right-4 duration-300"
               >
-                {/* BAGIAN GAMBAR - DIPERKETAT LOGIKANYA */}
+                {/* BAGIAN GAMBAR */}
                 <div
                   className={`w-20 h-20 rounded-2xl ${item.imageBg || "bg-gray-100"} flex-shrink-0 shadow-inner overflow-hidden flex items-center justify-center p-2`}
                 >
@@ -60,7 +68,6 @@ export default function CartDrawer({
                       alt={item.name}
                       className="w-full h-full object-contain drop-shadow-md"
                       onError={(e) => {
-                        // Jika gambar gagal load, ganti ke tulisan
                         (e.target as HTMLImageElement).src = "";
                         (e.target as HTMLImageElement).alt = "Error";
                       }}
@@ -82,7 +89,6 @@ export default function CartDrawer({
                     {item.price}
                   </p>
 
-                  {/* Pengatur Jumlah */}
                   <div className="flex items-center gap-4 mt-3">
                     <button
                       onClick={() => updateQuantity(item.id, -1)}
@@ -124,7 +130,12 @@ export default function CartDrawer({
                 Rp {totalPrice.toLocaleString("id-ID")}
               </span>
             </div>
-            <button className="w-full py-5 bg-[#1c2b3e] text-white rounded-full text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-black transition-all transform active:scale-95 shadow-xl shadow-[#1c2b3e]/20">
+
+            {/* 4. Tambahkan onClick ke tombol ini */}
+            <button
+              onClick={handleCheckout}
+              className="w-full py-5 bg-[#1c2b3e] text-white rounded-full text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-black transition-all transform active:scale-95 shadow-xl shadow-[#1c2b3e]/20"
+            >
               Lanjut ke Pembayaran
             </button>
           </div>
