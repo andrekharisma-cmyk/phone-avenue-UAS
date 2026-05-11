@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "../app/context/CartContext";
 import { useAuth } from "../app/context/AuthContext";
-import { useWishlist } from "../app/context/WishlistContext"; // 1. Pastikan import ini ada
+import { useWishlist } from "../app/context/WishlistContext";
 import CartDrawer from "./CartDrawer";
 import LoginModal from "./LoginModal";
 import ProfileModal from "./ProfileModal";
@@ -31,7 +31,7 @@ export default function Header({
   const pathname = usePathname();
   const { cart } = useCart();
   const { isLoggedIn, user } = useAuth();
-  const { wishlist } = useWishlist(); // 2. Ambil data wishlist
+  const { wishlist } = useWishlist();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -58,6 +58,7 @@ export default function Header({
               value={searchQuery}
               onChange={handleChange}
               placeholder="Cari gawai impianmu..."
+              suppressHydrationWarning // <--- FIX ERROR LAYAR MERAH DI SINI
               className="w-full border-2 border-gray-100 rounded-full py-3 pl-8 pr-14 focus:outline-none focus:border-[#c5a877] text-sm transition-all shadow-sm"
             />
             <div className="absolute right-1.5 top-1.5 bottom-1.5 bg-[#c5a877] text-white rounded-full px-5 flex items-center justify-center">
@@ -112,7 +113,7 @@ export default function Header({
               </div>
             </div>
 
-            {/* 3. IKON WISHLIST (YANG TADI HILANG) */}
+            {/* IKON WISHLIST */}
             <Link
               href="/wishlist"
               className="relative group p-2 cursor-pointer"
@@ -131,7 +132,7 @@ export default function Header({
                 ></path>
               </svg>
               {wishlist.length > 0 && (
-                <span className="absolute top-0 right-0 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white animate-bounce">
                   {wishlist.length}
                 </span>
               )}
@@ -155,7 +156,7 @@ export default function Header({
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                 ></path>
               </svg>
-              <span className="absolute top-0 right-0 bg-[#c5a877] text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute top-0 right-0 bg-[#c5a877] text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md">
                 {cart.length}
               </span>
             </div>
@@ -167,25 +168,25 @@ export default function Header({
           <div className="max-w-7xl mx-auto flex justify-center items-center space-x-16 uppercase tracking-[0.25em] font-bold">
             <Link
               href="/"
-              className={`text-sm transition-all ${isActive("/") ? "text-[#c5a877]" : "text-gray-400"}`}
+              className={`text-sm transition-all ${isActive("/") ? "text-[#c5a877] border-b-2 border-[#c5a877] pb-1" : "text-gray-400 hover:text-gray-900"}`}
             >
               Beranda
             </Link>
             <Link
               href="/merek"
-              className={`text-sm transition-all ${isActive("/merek") ? "text-[#c5a877]" : "text-gray-400"}`}
+              className={`text-sm transition-all ${isActive("/merek") ? "text-[#c5a877] border-b-2 border-[#c5a877] pb-1" : "text-gray-400 hover:text-gray-900"}`}
             >
               Merek
             </Link>
             <Link
               href="/aksesoris"
-              className={`text-sm transition-all ${isActive("/aksesoris") ? "text-[#c5a877]" : "text-gray-400"}`}
+              className={`text-sm transition-all ${isActive("/aksesoris") ? "text-[#c5a877] border-b-2 border-[#c5a877] pb-1" : "text-gray-400 hover:text-gray-900"}`}
             >
               Aksesoris
             </Link>
             <Link
               href="/pembayaran"
-              className={`text-sm transition-all ${isActive("/pembayaran") ? "text-[#c5a877]" : "text-gray-400"}`}
+              className={`text-sm transition-all ${isActive("/pembayaran") ? "text-[#c5a877] border-b-2 border-[#c5a877] pb-1" : "text-gray-400 hover:text-gray-900"}`}
             >
               Pembayaran
             </Link>
