@@ -4,7 +4,7 @@ import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "../context/CartContext";
-import { useWishlist } from "../context/WishlistContext";
+import { useWishlist } from "../context/WishlistContext"; // Pastikan Context ini sudah kamu buat
 
 export default function ProfilPage() {
   const { cart } = useCart();
@@ -12,6 +12,7 @@ export default function ProfilPage() {
 
   return (
     <main className="min-h-screen bg-white flex flex-col font-sans selection:bg-[#c5a877] selection:text-white">
+      {/* Header sudah pintar, tidak perlu kirim cartCount lagi */}
       <Header onSearch={(q) => console.log(q)} />
 
       <section className="flex-grow max-w-4xl mx-auto w-full px-8 py-20">
@@ -43,7 +44,7 @@ export default function ProfilPage() {
           </div>
         </div>
 
-        {/* Statistik Aktivitas */}
+        {/* Statistik Aktivitas - Menampilkan jumlah barang nyata */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
           <div className="p-10 bg-gray-50 rounded-[2.5rem] border border-gray-100 hover:shadow-xl transition-all group">
             <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-4">
@@ -54,7 +55,7 @@ export default function ProfilPage() {
               <span className="text-sm italic font-serif">Barang</span>
             </h3>
             <p className="text-xs text-gray-500 font-light leading-relaxed">
-              Produk yang menunggu untuk dibawa pulang.
+              Produk yang sedang menunggu di tas belanja Anda.
             </p>
           </div>
           <div className="p-10 bg-gray-50 rounded-[2.5rem] border border-gray-100 hover:shadow-xl transition-all group">
@@ -66,7 +67,7 @@ export default function ProfilPage() {
               <span className="text-sm italic font-serif">Favorit</span>
             </h3>
             <p className="text-xs text-gray-500 font-light leading-relaxed">
-              Gawai impian yang telah Anda simpan.
+              Gawai impian yang telah Anda tandai.
             </p>
           </div>
         </div>
@@ -93,7 +94,7 @@ export default function ProfilPage() {
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                   {item.label}
                 </span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-gray-900 text-right ml-4">
                   {item.value}
                 </span>
               </div>
@@ -101,12 +102,18 @@ export default function ProfilPage() {
           </div>
         </div>
 
-        {/* Tombol Aksi */}
+        {/* Tombol Aksi - Ditambah suppressHydrationWarning untuk jaga-jaga */}
         <div className="mt-20 pt-10 border-t border-gray-100 flex flex-col sm:flex-row gap-4">
-          <button className="flex-1 py-5 bg-[#1c2b3e] text-white rounded-full text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-black transition-all shadow-xl">
+          <button
+            suppressHydrationWarning={true}
+            className="flex-1 py-5 bg-[#1c2b3e] text-white rounded-full text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-black transition-all shadow-xl active:scale-95"
+          >
             Edit Profil
           </button>
-          <button className="flex-1 py-5 border-2 border-red-50 px-10 text-red-400 rounded-full text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-red-50 transition-all">
+          <button
+            suppressHydrationWarning={true}
+            className="flex-1 py-5 border-2 border-red-50 px-10 text-red-400 rounded-full text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-red-50 transition-all active:scale-95"
+          >
             Keluar Akun
           </button>
         </div>
