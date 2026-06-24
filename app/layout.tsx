@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
-import { AuthProvider } from "./context/AuthContext"; // <--- 1. Import ini
+import { AuthProvider } from "./context/AuthContext";
+import Preloader from "@/components/Preloader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,9 +16,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Metadata yang sudah di-update dari gambar
 export const metadata: Metadata = {
-  title: "Phone Avenue",
-  description: "E-commerce gawai premium",
+  title: {
+    default: "Phone Avenue - Flagship Terbaru, Garansi Resmi",
+    template: "%s | Phone Avenue",
+  },
+  description:
+    "Toko gawai premium terpercaya. iPhone, Samsung, Xiaomi dengan garansi resmi.",
+  keywords: [
+    "smartphone",
+    "iPhone",
+    "Samsung",
+    "Xiaomi",
+    "toko hp",
+    "Phone Avenue",
+  ],
+  authors: [{ name: "Frans Edinata" }],
+  openGraph: {
+    title: "Phone Avenue",
+    description: "Flagship Terbaru. Garansi Resmi.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -30,14 +50,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Preloader /> {/* <--- PRELOADER DITAMBAHKAN DI SINI */}
         <AuthProvider>
           {" "}
-          {/* <--- 2. Bungkus di sini */}
           <CartProvider>
             <WishlistProvider>{children}</WishlistProvider>
           </CartProvider>
         </AuthProvider>{" "}
-        {/* <--- 3. Tutup di sini */}
       </body>
     </html>
   );

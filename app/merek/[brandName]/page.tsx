@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, use } from "react";
+import React, { use } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -17,52 +17,87 @@ export default function KatalogMerekPage({
   const brandTitle = resolvedParams.brandName; // Nama ini harus cocok dengan nama folder
   const { addToCart } = useCart();
 
-  // Database produk sederhana
+  // Database produk yang sudah diperbanyak
   const allProducts = [
-    {
-      id: 1,
-      brand: "Apple",
-      name: "iPhone 15 Pro Max",
-      price: "Rp 16,990,000",
-      oldPrice: "Rp 18,000,000",
-      rating: "4.9/5",
-      tag: "Premium",
+    { 
+      id: 1, 
+      brand: "Apple", 
+      name: "iPhone 15 Pro Max", 
+      price: "Rp 16,990,000", 
+      oldPrice: "Rp 18,000,000", 
+      rating: "4.9/5", 
+      tag: "Premium", 
+      image: "https://www.apple.com/newsroom/images/2023/09/apple-unveils-iphone-15-pro-and-iphone-15-pro-max/article/Apple-iPhone-15-Pro-lineup-hero-230912_Full-Bleed-Image.jpg.large_2x.jpg" 
     },
-    {
-      id: 2,
-      brand: "Samsung",
-      name: "Galaxy S24 Ultra",
-      price: "Rp 15,990,000",
-      oldPrice: "Rp 18,000,000",
-      rating: "4.8/5",
-      tag: "Premium",
+    { 
+      id: 2, 
+      brand: "Samsung", 
+      name: "Galaxy S24 Ultra", 
+      price: "Rp 15,990,000", 
+      oldPrice: "Rp 18,000,000", 
+      rating: "4.8/5", 
+      tag: "Premium", 
+      image: "https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/114/MTA-158938197/samsung_samsung_galaxy_s24_ultra_5g_ram_12-256gb_-_garansi_resmi_full03_ghzmsoto.jpg" 
     },
-    {
-      id: 3,
-      brand: "Samsung",
-      name: "Galaxy Z Fold 5",
-      price: "Rp 15,990,000",
-      oldPrice: "Rp 18,000,000",
-      rating: "4.6/5",
-      tag: "Premium",
+    { 
+      id: 3, 
+      brand: "Samsung", 
+      name: "Galaxy Z Fold 5", 
+      price: "Rp 15,990,000", 
+      oldPrice: "Rp 18,000,000", 
+      rating: "4.6/5", 
+      tag: "Premium", 
+      image: "https://www.planetgadget.store/media/wysiwyg/blog/post/g/a/galaxy_z_fold_5.jpg" 
     },
-    {
-      id: 4,
-      brand: "Xiaomi",
-      name: "Xiaomi 14 Pro Series",
-      price: "Rp 10,990,000",
-      oldPrice: "Rp 12,000,000",
-      rating: "4.8/5",
-      tag: "Xiaomi",
+    { 
+      id: 4, 
+      brand: "Xiaomi", 
+      name: "Xiaomi 14 Pro Series", 
+      price: "Rp 10,990,000", 
+      oldPrice: "Rp 12,000,000", 
+      rating: "4.8/5", 
+      tag: "Xiaomi", 
+      image: "https://gizmologi.id/wp-content/uploads/2023/10/Xioami-14-series-860x753.jpg" 
     },
-    {
-      id: 5,
-      brand: "Apple",
-      name: "iPhone 14 Pro",
-      price: "Rp 14,000,000",
-      oldPrice: "Rp 15,500,000",
-      rating: "4.7/5",
-      tag: "Sale",
+    { 
+      id: 5, 
+      brand: "Apple", 
+      name: "iPhone 14 Pro", 
+      price: "Rp 13,999,000", 
+      oldPrice: "Rp 15,500,000", 
+      rating: "4.7/5", 
+      tag: "Sale", 
+      image: "https://www.apple.com/newsroom/images/product/iphone/standard/Apple-iPhone-14-Pro-iPhone-14-Pro-Max-hero-220907_Full-Bleed-Image.jpg.large_2x.jpg" 
+    },
+    { 
+      id: 6, 
+      brand: "Samsung", 
+      name: "Galaxy A55 5G", 
+      price: "Rp 5,499,000", 
+      oldPrice: "Rp 6,000,000", 
+      rating: "4.5/5", 
+      tag: "Mid-Range", 
+      image: "https://images.samsung.com/is/image/samsung/p6pim/id/sm-a556elgaxid/gallery/id-galaxy-a55-5g-sm-a556-sm-a556elgaxid-thumb-539437826" 
+    },
+    { 
+      id: 7, 
+      brand: "Xiaomi", 
+      name: "Redmi Note 13 Pro+", 
+      price: "Rp 4,999,000", 
+      oldPrice: "Rp 5,500,000", 
+      rating: "4.6/5", 
+      tag: "Best Value", 
+      image: "https://i02.appmifile.com/mi-com-product/fly-birds/redmi-note-13-pro-plus/M/990c39f8dc36c5e2a9bc7ca8ffe39a0f.png" 
+    },
+    { 
+      id: 8, 
+      brand: "Apple", 
+      name: "iPhone SE 3rd Gen", 
+      price: "Rp 8,499,000", 
+      oldPrice: "Rp 9,000,000", 
+      rating: "4.4/5", 
+      tag: "Compact", 
+      image: "https://www.apple.com/newsroom/images/product/iphone/standard/Apple-iPhoneSE-hero-220308_Full-Bleed-Image.jpg.large_2x.jpg" 
     },
   ];
 
@@ -99,6 +134,7 @@ export default function KatalogMerekPage({
                     id: product.id,
                     name: product.name,
                     price: product.price,
+                    image: product.image, // URL Gambar ditambahkan ke keranjang
                     imageBg: "bg-gray-100",
                     quantity: 1,
                   })
@@ -115,7 +151,7 @@ export default function KatalogMerekPage({
           </div>
         )}
       </section>
-      <div className="max-w-7xl mx-auto px-8 pt-10">
+      <div className="max-w-7xl mx-auto px-8 pt-10 pb-20">
         <Link
           href="/merek"
           className="flex items-center space-x-2 text-xs font-bold text-gray-400 hover:text-[#c5a877] transition-colors uppercase tracking-widest"

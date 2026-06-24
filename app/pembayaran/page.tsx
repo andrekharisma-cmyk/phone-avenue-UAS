@@ -5,6 +5,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "../context/CartContext";
+import { createOrder } from "../lib/api";
 
 export default function PembayaranPage() {
   const { cart, totalPrice, clearCart } = useCart();
@@ -12,14 +13,12 @@ export default function PembayaranPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  // State Form
   const [formData, setFormData] = useState({
     nama: "",
     whatsapp: "",
     alamat: "",
   });
 
-  // Validasi: Tombol hanya aktif jika data terisi
   const isFormValid =
     formData.nama.trim() !== "" &&
     formData.whatsapp.trim() !== "" &&
@@ -33,27 +32,33 @@ export default function PembayaranPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Logika Klik Konfirmasi
-  const handleProcessPayment = () => {
-    if (!isFormValid) return;
-
-    setIsProcessing(true); // Mulai loading
-
-    // Simulasi proses bank selama 2.5 detik
-    setTimeout(() => {
-      setIsProcessing(false);
-      setShowSuccess(true); // Munculkan Modal Sukses
-    }, 2500);
-  };
-
   const tax = totalPrice * 0.11;
   const grandTotal = totalPrice + tax;
+
+  // UPDATED: Gunakan createOrder() dari API
+  const handleProcessPayment = async () => {
+    if (!isFormValid) return;
+    setIsProcessing(true);
+    try {
+      await createOrder({
+        nama: formData.nama,
+        whatsapp: formData.whatsapp,
+        alamat: formData.alamat,
+        paymentMethod,
+        totalPrice: grandTotal,
+      });
+      setShowSuccess(true);
+    } catch (err) {
+      alert("Gagal memproses pesanan. Coba lagi.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-white flex flex-col font-sans relative">
       <Header onSearch={(q) => console.log(q)} />
 
-      {/* 1. MODAL SUKSES (Muncul setelah klik Konfirmasi) */}
       {showSuccess && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-[#0a0f16]/95 backdrop-blur-xl animate-in fade-in duration-700"></div>
@@ -94,7 +99,6 @@ export default function PembayaranPage() {
         </div>
       )}
 
-      {/* 2. TAMPILAN HALAMAN UTAMA */}
       <div
         className={`max-w-7xl mx-auto w-full px-8 py-20 transition-all duration-700 ${showSuccess ? "blur-2xl scale-95 opacity-0" : "opacity-100"}`}
       >
@@ -103,9 +107,7 @@ export default function PembayaranPage() {
           <div className="lg:w-2/3 space-y-20">
             <section>
               <div className="flex items-center space-x-4 mb-12">
-                <span className="text-[#c5a877] font-serif italic text-4xl">
-                  01
-                </span>
+                <span className="text-[#c5a877] font-serif italic text-4xl">01</span>
                 <h3 className="text-xs font-black tracking-[0.4em] uppercase text-gray-900 border-b-2 border-gray-100 pb-2">
                   Informasi Pengiriman
                 </h3>
@@ -155,9 +157,7 @@ export default function PembayaranPage() {
 
             <section>
               <div className="flex items-center space-x-4 mb-12">
-                <span className="text-[#c5a877] font-serif italic text-4xl">
-                  02
-                </span>
+                <span className="text-[#c5a877] font-serif italic text-4xl">02</span>
                 <h3 className="text-xs font-black tracking-[0.4em] uppercase text-gray-900 border-b-2 border-gray-100 pb-2">
                   Metode Pembayaran
                 </h3>
@@ -173,11 +173,7 @@ export default function PembayaranPage() {
                       {m === "cc" ? "💳" : m === "va" ? "🏦" : "📱"}
                     </span>
                     <span className="text-[9px] font-black tracking-widest uppercase">
-                      {m === "cc"
-                        ? "Credit Card"
-                        : m === "va"
-                          ? "Bank Transfer"
-                          : "E-Wallet"}
+                      {m === "cc" ? "Credit Card" : m === "va" ? "Bank Transfer" : "E-Wallet"}
                     </span>
                   </button>
                 ))}
@@ -185,7 +181,7 @@ export default function PembayaranPage() {
             </section>
           </div>
 
-          {/* Sisi Kanan: Ringkasan & Tombol Konfirmasi */}
+          {/* Sisi Kanan: Ringkasan */}
           <div className="lg:w-1/3">
             <div className="sticky top-40 bg-[#1c2b3e] text-white p-10 rounded-[3rem] shadow-2xl">
               <h3 className="text-[10px] font-black tracking-[0.4em] uppercase text-[#c5a877] mb-10 text-center">
@@ -194,17 +190,10 @@ export default function PembayaranPage() {
 
               <div className="space-y-6 mb-10 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                 {cart.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex justify-between items-center border-b border-white/5 pb-4"
-                  >
+                  <div key={item.id} className="flex justify-between items-center border-b border-white/5 pb-4">
                     <div>
-                      <p className="text-[10px] font-bold uppercase">
-                        {item.name}
-                      </p>
-                      <p className="text-[9px] text-gray-400 italic">
-                        Jumlah: {item.quantity}
-                      </p>
+                      <p className="text-[10px] font-bold uppercase">{item.name}</p>
+                      <p className="text-[9px] text-gray-400 italic">Jumlah: {item.quantity}</p>
                     </div>
                     <p className="text-[10px] font-bold">{item.price}</p>
                   </div>
