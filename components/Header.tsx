@@ -59,7 +59,7 @@ export default function Header({
               onChange={handleChange}
               placeholder="Cari gawai impianmu..."
               suppressHydrationWarning // <--- FIX ERROR LAYAR MERAH DI SINI
-              className="w-full border-2 border-gray-100 rounded-full py-3 pl-8 pr-14 focus:outline-none focus:border-[#c5a877] text-sm transition-all shadow-sm"
+              className="w-full border-2 border-gray-100 rounded-full py-3 pl-8 pr-14 focus:outline-none focus:border-[#c5a877] text-sm transition-all shadow-sm text-gray-900"
             />
             <div className="absolute right-1.5 top-1.5 bottom-1.5 bg-[#c5a877] text-white rounded-full px-5 flex items-center justify-center">
               <svg
