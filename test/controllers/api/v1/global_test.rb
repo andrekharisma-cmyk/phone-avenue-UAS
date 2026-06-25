@@ -5,4 +5,3 @@ class Api::V1::GlobalTest < ActionDispatch::IntegrationTest
     assert true
   end
 end
-
