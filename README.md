@@ -1,24 +1,8 @@
-# README
+# Phone Avenue Project (UAS)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Repository ini berisi gabungan dari sistem **Frontend** dan **Backend (API)** untuk proyek Phone Avenue.
 
-Things you may want to cover:
+## Anggota Tim
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Andre Kharisma
+- Frans Edinata Sembiring
