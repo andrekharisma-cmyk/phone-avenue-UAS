@@ -65,11 +65,11 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Prepare Database
+      - name: Prepare Database Folder and Run Migration
         env:
           RAILS_ENV: test
         run: |
-          bin/rails db:create
+          mkdir -p db
           bin/rails db:migrate
 
       - name: Run tests
